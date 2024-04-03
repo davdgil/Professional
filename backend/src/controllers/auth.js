@@ -2,7 +2,7 @@ const { usersModel } = require('../models');
 
 const createUser = async (req, res) => {
     try {
-        const body = req.body; // Aquí deberías acceder a req.body para obtener los datos del usuario
+        const body = req.body; 
         const data = await usersModel.create(body);
         res.status(201).json(data); // Devuelve el nuevo usuario creado
     } catch (err) {

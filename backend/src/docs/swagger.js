@@ -1,4 +1,3 @@
-const express = require("express");
 const swaggerJsdoc = require("swagger-jsdoc");
 
 const options = {
@@ -28,7 +27,7 @@ const options = {
       securitySchemes: {
         bearerAuth: {
           type: "http",
-          scheme: "bearer",
+          scheme: "bearer"
         },
       },
       schemas: {
@@ -67,7 +66,7 @@ const options = {
       },
     },
   },
-  apis: ["./routes/*.js"], // Ajuste en la ruta de búsqueda de archivos de rutas
+  apis: ["./routes/*.js"],
 };
 
 module.exports = swaggerJsdoc(options);

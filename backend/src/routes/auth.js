@@ -14,7 +14,7 @@ const { createUser } = require('../controllers/auth');
  *          content:
  *              application/json:
  *                  schema:
- *                      $ref: "#/components/schemas/user"
+ *                      $ref: "#/components/schemas/User"
  *      responses:
  *          '200':
  *              description: Returns the inserted object
