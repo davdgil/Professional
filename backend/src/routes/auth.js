@@ -1,26 +1,28 @@
 const express = require("express");
 const router = express.Router();
 const { createUser } = require('../controllers/auth');
+const { validatorRegister } = require('../validators/auth')
 
 /**
- * @openapi
- * /api/auth/register:
- *  post:
- *      tags:
- *      - User
- *      summary: User register
- *      description: Register a new user
- *      requestBody:
- *          content:
- *              application/json:
- *                  schema:
- *                      $ref: "#/components/schemas/User"
- *      responses:
- *          '200':
- *              description: Returns the inserted object
- *          '401':
- *              description: Validation error
+ * @swagger
+ * /auth/register:
+ *   post:
+ *     summary: Crea un nuevo usuario
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Usuario creado con éxito.
+ *       400:
+ *         description: Datos de entrada inválidos.
+ *       500:
+ *         description: Error interno del servidor.
  */
-router.post("/register", createUser);
+router.post("/register", validatorRegister, createUser);
 
 module.exports = router;

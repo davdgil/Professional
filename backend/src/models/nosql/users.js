@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'comerciante', 'usuario', 'anonimo'], // Lista de roles válidos
+        enum: ['admin', 'comerciante', 'usuario', 'anonimo'], //roles válidos
         default: 'usuario'
     },
     city: {
