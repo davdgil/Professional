@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 
 const saveUser = async (user) => {
   try {
-    const response = await fetch('/api/users', {
+    const response = await fetch('http://localhost:9000/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,55 +32,6 @@ const saveUser = async (user) => {
   }
 }
 
-const checkExistingUser = async (user) => {
-
-  try {
-
-    const res = await fetch("http://localhost:3000/api/users");
-    const data = await res.json();
-
-    const userlog = data.users.find((u) => u.email === user.email);
-
-    if (userlog) {
-      toast.error("Usuario ya existente")
-    } else {
-      console.log("comprobando si hay un comercio asociado")
-      checkExistingUserCommerce(user);
-    }
-  } catch {
-    //esto se ejecuta en caso de no haya ningun usuario en el txt
-    console.log("comprobando si hay un comercio asociado catch")
-    checkExistingUserCommerce(user);
-  }
-
-}
-
-const checkExistingUserCommerce = async (user) => {
-  try {
-    const res = await fetch("http://localhost:3000/api/commerce");
-    const data = await res.json();
-
-    const userMerchant = data.commerce.find((u) => u.email === user.email);
-    if (userMerchant) {
-      console.log(userMerchant);
-      toast.success("Usuario comerciante");
-
-      const newUserMerchant = {
-        ...user,
-        userType: 'merchant'
-      };
-      console.log(newUserMerchant);
-      saveUser(newUserMerchant);
-
-    } else {
-      saveUser(user)
-      
-    }
-  } catch (error) {
-    saveUser(user)
-  }
-
-}
 
 function SignUp() {
   const router = useRouter();
@@ -88,16 +39,15 @@ function SignUp() {
   const adminMode = watch('adminMode', false);
 
   const onSubmit = (data) => {
-    const userType = adminMode ? 'admin' : 'user';
     console.log(data)
+    const { adminMode, ...userData } = data;
 
     const newUser = {
-      id: uuidv4(),
-      userType: userType,
-      ...data
+      ...userData,
+      role: data.adminMode ? 'admin' : 'usuario'
     }
     console.log(newUser)
-    checkExistingUser(newUser)
+    saveUser(newUser)
 
   }
 

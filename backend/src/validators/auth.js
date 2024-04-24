@@ -10,7 +10,7 @@ const validatorRegister = [
     check('password')
         .exists()
         .withMessage('El campo password es requerido')
-        .isLength({ min: 6 })
+        .isLength({ min: 4 })
         .withMessage('La contraseña debe tener al menos 6 caracteres'),
     check('city')
         .exists()
@@ -22,10 +22,18 @@ const validatorRegister = [
         .optional()
         .isArray()
         .withMessage('Los intereses deben ser un arreglo'),
+    check('date')
+        .optional()
+        .isISO8601()
+        .withMessage('La fecha de nacimiento debe ser una fecha válida'),
+    check('offers')
+        .optional()
+        .isBoolean()
+        .withMessage('El campo offers debe ser booleano'),
     (req, res, next) => {
         validateResults(req, res, next);
     }
 ];
 
 
-module.exports = { validatorRegister};
+module.exports = { validatorRegister };

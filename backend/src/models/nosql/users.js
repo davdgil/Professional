@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     interests: [String],
+    date: { 
+        type: Date,
+    },
+    offers: {
+        type: Boolean,
+    },
     isActive: {
         type: Boolean,
         default: true 

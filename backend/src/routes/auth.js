@@ -24,7 +24,7 @@ const { validatorRegister } = require('../validators/auth')
  *       500:
  *         description: Error interno del servidor.
  */
-router.post("/register", validatorRegister,userVerification, createNewUser);
+router.post("/register", validatorRegister, userVerification, createNewUser);
 
 
 
