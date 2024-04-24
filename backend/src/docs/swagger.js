@@ -66,6 +66,10 @@ const options = {
                   type: "string"
                 },
                 description: "Lista de intereses del usuario."
+              },
+              isActive: {
+                type: "boolean"
+
               }
             },
             required: ["email", "password", "city"],
@@ -74,7 +78,9 @@ const options = {
               password: "password123",
               role: "usuario",
               city: "Ciudad Metrópolis",
-              interests: ["deporte", "tecnología"]
+              interests: ["deporte", "tecnología"],
+              isActive: true
+
             }
           }
         }

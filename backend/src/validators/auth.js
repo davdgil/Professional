@@ -27,4 +27,5 @@ const validatorRegister = [
     }
 ];
 
+
 module.exports = { validatorRegister};

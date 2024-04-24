@@ -9,18 +9,20 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
     },
     role: {
         type: String,
-        enum: ['admin', 'comerciante', 'usuario', 'anonimo'], //roles válidos
+        enum: ['admin', 'merchant', 'usuario', 'anonimo'], //roles válidos
         default: 'usuario'
     },
     city: {
         type: String,
-        required: true
     },
-    interests: [String]
+    interests: [String],
+    isActive: {
+        type: Boolean,
+        default: true 
+    }
 }, {
     timestamps: true // añade createdAt y updatedAt automáticamente
 });
