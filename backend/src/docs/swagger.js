@@ -61,7 +61,7 @@ const options = {
                 description: "Ciudad de residencia del usuario."
               },
               interests: {
-                type: "array",
+                type: "string",
                 items: {
                   type: "string"
                 },
@@ -78,7 +78,7 @@ const options = {
               password: "password123",
               role: "usuario",
               city: "Ciudad Metrópolis",
-              interests: ["deporte", "tecnología"],
+              interests: "hamburguesas",
               isActive: true
 
             }

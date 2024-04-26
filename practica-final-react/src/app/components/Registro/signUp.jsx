@@ -99,7 +99,7 @@ function SignUp() {
               </div>
 
               <div>
-                <label htmlFor="birthdate" className="block mb-2 text-sm font-medium text-gray-300 dark:text-white">Fecha de nacimiento</label>
+                <label htmlFor="date" className="block mb-2 text-sm font-medium text-gray-300 dark:text-white">Fecha de nacimiento</label>
 
                 <input
                   type="date"
@@ -108,7 +108,7 @@ function SignUp() {
                     min: '1930-01-01',
                     max: '2015-12-31',
                   })}
-                  id="birthdate"
+                  id="date"
                   className="bg-gray-50 border border-gray-300 text-zinc-950 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />

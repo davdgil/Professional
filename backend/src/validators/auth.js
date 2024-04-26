@@ -20,8 +20,8 @@ const validatorRegister = [
         .withMessage('El campo city no puede estar vacío'),
     check('interests')
         .optional()
-        .isArray()
-        .withMessage('Los intereses deben ser un arreglo'),
+        .isString()
+        .withMessage('Los intereses deben ser un String'),
     check('date')
         .optional()
         .isISO8601()
@@ -30,6 +30,7 @@ const validatorRegister = [
         .optional()
         .isBoolean()
         .withMessage('El campo offers debe ser booleano'),
+
     (req, res, next) => {
         validateResults(req, res, next);
     }

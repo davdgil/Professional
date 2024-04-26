@@ -3,64 +3,58 @@ import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { jwtDecode } from 'jwt-decode';
 import Cookies from 'js-cookie';
 
 
-const getUser = async (userEmail, userPass, router) => {
+const login = async (userEmail, userPass, router) => {
 
   try {
-    const res = await fetch("http://localhost:3000/api/users");
-    const data = await res.json();
-    console.log(data)
+    const response = await fetch('http://localhost:9000/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: userEmail, password: userPass }),
+    });
 
-    // Buscar el usuario por el correo electrónico
-    const user = data.users.find((u) => u.email === userEmail);
+    const data = await response.json();
 
-    if (user) {
-      console.log("Usuario encontrado:");
-      const pass = data.users.find((u) => u.password === userPass);
-      if (pass) {
-        toast.loading("Redirigiendo a la pagina...", { duration: 1000 })
-        const userType = user.userType;
-        console.log("Usuario: ", user)
-        console.log("Tipo de usuario:", userType);
+    if (!response.ok) {
+      toast.error(data.message || "Error al iniciar sesión");
+      return;
+    }
+      console.log(data)
+    // Guardar el token
+    const { token } = data;
+    localStorage.setItem('token', token);
 
-        switch (userType) {
-          case 'user':
-            Cookies.set('user', JSON.stringify(user), { path: '/' });
-            router.push("/user")
-            break;
-          case 'admin':
-            Cookies.set('user', JSON.stringify(user), { path: '/' });
-            router.push("/admin")
-            break;
-          case 'merchant':
-            Cookies.set('user', JSON.stringify(user), { path: '/' });
-            if (Cookies.get('user')) {
-              console.log(Cookies.get('user'))
-            } else {
-              console.error('Error al establecer la cookie');
-            }
-            router.push("/merchant");
-            break;
-        }
-      } else {
-        toast.error("Contraseña incorrecta")
-      }
-      return user;
-    } else {
-      toast.error("Usuario incorrecto")
-      console.log("Usuario no encontrado");
+    // Decodificar el token para obtener el rol del usuario
+    const decodedToken = jwtDecode(token);
+    const userType = decodedToken.role;
 
-      return null;
+    switch (userType) {
+      case 'usuario':
+        console.log("Usuario: usuario")
+        router.push('/user');
+        break;
+      case 'admin':
+        console.log("Usuario: admin")
+        router.push('/admin');
+        break;
+      case 'comerciante':
+        console.log("Usuario: merchant")
+        router.push('/merchant');
+        break;
+      default:
+        console.error('Rol no reconocido:', userType);
+        break;
     }
   } catch (error) {
-   
-    return null;
+    console.error('Error en la función login:', error);
+    toast.error("Error en el servidor");
   }
 };
-
-
 
 
 function Login() {
@@ -70,7 +64,7 @@ function Login() {
   const onSubmit = (data) => {
 
     console.log('Datos del formulario:', data);
-    getUser(data.email, data.password, router)
+    login(data.email, data.password, router)
   }
 
   const privateMode = () => {

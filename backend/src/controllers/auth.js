@@ -56,7 +56,7 @@ const createMerchant = async (req, res) => {
 
 }
 
-const existingUser = async (req, res) => {
+const existingUserGET = async (req, res) => {
     try {
         const { email } = req.query;
         const user = await usersModel.findOne({ email });
@@ -78,5 +78,28 @@ const existingUser = async (req, res) => {
     }
 };
 
+const existingUserPOST = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await usersModel.findOne({ email });
+        if (user) {
+            res.status(200).json({
+                message: 'Usuario existente',
+                user: {
+                    email: user.email,
+                    role: user.role,
+                    isActive: user.isActive
+                }
+            });
+        } else {
+            res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error interno al verificar el usuario' });
+    }
+};
 
-module.exports = { createNewUser, existingUser, createMerchant };
+
+
+module.exports = { createNewUser, existingUserGET, existingUserPOST, createMerchant };

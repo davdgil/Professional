@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { createNewUser, existingUser, createMerchant } = require('../controllers/auth');
-const { userVerification } = require('../middleware/userVerification')
+const { createNewUser, existingUserGET, createMerchant } = require('../controllers/auth');
+const { userVerification,} = require('../middleware/userVerification')
+const { existingUserPOST, verifyPassword, generateToken } = require('../middleware/login')
 const { validatorRegister } = require('../validators/auth')
 
 /**
@@ -51,7 +52,7 @@ router.post("/register", validatorRegister, userVerification, createNewUser);
  *       500:
  *         description: Error interno del servidor.
  */
-router.get("/existingUser", existingUser);
+router.get("/existingUser", existingUserGET);
 
 /**
  * @swagger
@@ -86,6 +87,45 @@ router.get("/existingUser", existingUser);
  */
 
 router.post('/createMerchant', createMerchant);
+
+
+
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Autentica a un usuario y retorna un JWT
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       200:
+ *         description: Usuario autenticado correctamente, retorna JWT.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Login exitoso y token generado"
+ *                 token:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwicm9sZSI6InVzZXIiLCJpYXQiOjE1MTYyMzkwMjJ9.QdRn4OzQ6-IvmFw2Nn13n7a5G1NWRwnDnHxHZS2XtkU"
+ *       401:
+ *         description: Autenticación fallida, contraseña incorrecta.
+ *       404:
+ *         description: Usuario no encontrado.
+ *       500:
+ *         description: Error interno del servidor.
+ */
+
+router.post('/login', existingUserPOST, verifyPassword, generateToken )
 
 
 module.exports = router;
