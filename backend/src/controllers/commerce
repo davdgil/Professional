@@ -1,0 +1,30 @@
+const { commercesModel } = require('../models');
+const { createMerchantCONTROLLER } = require('./auth');
+const { matchedData } = require('express-validator');
+
+const createCommerce = async (req, res) => {
+    const data = matchedData(req);
+    try {
+
+        const merchant = await createMerchantCONTROLLER(data.email);
+
+        if (!merchant) {
+          
+            return res.status(400).json({ message: 'No se pudo crear el comerciante' });
+        }
+        const newCommerce = new commercesModel({
+            ...data,
+            merchant: merchant._id  
+        });
+
+        await newCommerce.save();
+        console.log('Comercio creado');
+        res.status(201).json({ message: 'Comercio y comerciante creados con éxito', commerce: newCommerce });
+
+    } catch (error) {
+        console.error('Error al crear comercio y comerciante:', error);
+        res.status(500).json({ error: 'Error interno al crear el comercio y comerciante' });
+    }
+};
+
+module.exports = { createCommerce };

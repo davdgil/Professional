@@ -88,9 +88,6 @@ router.get("/existingUser", existingUserGET);
 
 router.post('/createMerchant', createMerchant);
 
-
-
-
 /**
  * @swagger
  * /auth/login:

@@ -82,7 +82,39 @@ const options = {
               isActive: true
 
             }
+          },
+          Commerce: {
+            type: "object",
+            required: ["commerceName", "email", "cif", "address"],
+            properties: {
+              commerceName: {
+                type: "string",
+                description: "Nombre del comercio."
+              },
+              email: {
+                type: "string",
+                format: "email",
+                description: "Correo electrónico del comercio. Debe ser único."
+              },
+              phone: {
+                type: "string",
+                description: "Teléfono de contacto del comercio."
+              },
+              cif: {
+                type: "string",
+                description: "CIF del comercio. Debe ser único."
+              },
+              address: {
+                type: "string",
+                description: "Dirección física del comercio."
+              },
+              merchant: {
+                type: "string",
+                description: "Identificador único del comerciante asociado a este comercio."
+              }
+            }
           }
+          
         }
     }
   },

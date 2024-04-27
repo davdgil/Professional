@@ -38,7 +38,28 @@ const createNewUser = async (req, res) => {
     }
 };
 
+const createMerchantCONTROLLER = async (email) => {
+    const newMerchant = new usersModel({
+        email: email,    // Establece el email
+        isActive: false, // Comerciante no activo inicialmente
+        role: "merchant" // Rol específico como comerciante
+    });
+    try {
+        await newMerchant.save();
+        console.log("comerciante creado con éxito")
+        return newMerchant;
+       
+    } catch (err) {
+        console.log('Error al crear el comerciante' )
+        console.log(err)
+        return null;
+        
+    }
+
+}
+
 const createMerchant = async (req, res) => {
+    console.log(req)
     const { email } = req.body
     const newMerchant = new usersModel({
         email: email,    // Establece el email
@@ -52,7 +73,6 @@ const createMerchant = async (req, res) => {
         console.log(err)
         res.status(500).json({ error: 'Error al crear el comerciante' });
     }
-
 
 }
 
@@ -102,4 +122,4 @@ const existingUserPOST = async (req, res) => {
 
 
 
-module.exports = { createNewUser, existingUserGET, existingUserPOST, createMerchant };
+module.exports = { createNewUser, existingUserGET, existingUserPOST, createMerchant, createMerchantCONTROLLER };

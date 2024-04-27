@@ -10,13 +10,12 @@ async function onSubmit(commerce, reset) {
     console.log(commerce);
 
     const newCommerce = {
-        id: uuidv4(),
-        ...commerce,
+        ...commerce,  // Removido id para no enviarlo
     }
 
-    console.log("ASIGNANDO ID ", newCommerce);
+    console.log("Datos del comercio ", newCommerce);
     try {
-        const response = await fetch('/api/commerce', {
+        const response = await fetch('http://localhost:9000/api/commerce/createCommerce', {  // Asegúrate de que la URL es correcta
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,14 +24,13 @@ async function onSubmit(commerce, reset) {
         });
 
         if (!response.ok) {
-            toast.error("Error al añadir un nuevo Comercio")
+            toast.error("Error al añadir un nuevo comercio")
             console.error('Error en la función POST. Código de estado:', response.status);
-            return;  // Salir de la función si hay un error en la respuesta
+            return;  
         } else {
             reset()
-            console.log('Comercio añadido con exito');
-            toast.success("Comercio añádido con éxito")
-
+            console.log('Comercio añadido con éxito');
+            toast.success("Comercio añadido con éxito")
         }
 
     } catch (error) {
@@ -132,17 +130,17 @@ function Form() {
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full px-3">
-                        <label className="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" htmlFor="addres">
+                        <label className="block uppercase tracking-wide text-gray-300 text-xs font-bold mb-2" htmlFor="address">
                             Dirección
-                            {errors.addres && (
+                            {errors.address && (
                                 <span className="text-red-500 text-xs italic"> *</span>
                             )}
                         </label>
 
                         <input
-                            {...register("addres", { required: true })}
+                            {...register("address", { required: true })}
                             className="appearance-none block w-full bg-gray-200 text-black border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                            id="addres"
+                            id="address"
                             type="search"
                         />
                         <p className="text-gray-400 text-xs italic">direccion del establecimiento</p>

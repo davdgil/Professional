@@ -46,7 +46,7 @@ const deleteComerces = async (commerceID) => {
     }
 }
 
-export default function Commerces( {commerces} ) {
+export default function Commerces({ commerces }) {
     // El array vacío asegura que el efecto solo se ejecute una vez al montar el componente.
 
     return (
