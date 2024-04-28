@@ -6,16 +6,16 @@ const signToken = (payload) => {
     });
 };
 
-
 const verifyToken = (token) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         return {
             valid: true,
             expired: false,
-            decoded
+            decoded, // Asegúrate de que decoded es el objeto con los datos del usuario
         };
     } catch (error) {
+        console.log(error);
         return {
             valid: false,
             expired: error.message.includes('jwt expired'),
@@ -23,5 +23,6 @@ const verifyToken = (token) => {
         };
     }
 };
+
 
 module.exports = { signToken, verifyToken };

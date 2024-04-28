@@ -1,29 +1,29 @@
 const { commercesModel } = require('../models');
 const { createMerchantCONTROLLER } = require('./auth');
 const { matchedData } = require('express-validator');
+const { handleError } = require('../utils/handleResponses');
 
 const createCommerce = async (req, res) => {
     const data = matchedData(req);
     try {
-
         const merchant = await createMerchantCONTROLLER(data.email);
 
         if (!merchant) {
-          
-            return res.status(400).json({ message: 'No se pudo crear el comerciante' });
+            console.log("No se pudo crear el comerciante")
+            handleError(res, "No se pudo crear el comerciante", 400);
+            return;
         }
         const newCommerce = new commercesModel({
             ...data,
-            merchant: merchant._id  
+            merchant: merchant._id
         });
 
         await newCommerce.save();
-        console.log('Comercio creado');
+        console.log("Comercio creado")
         res.status(201).json({ message: 'Comercio y comerciante creados con éxito', commerce: newCommerce });
-
     } catch (error) {
-        console.error('Error al crear comercio y comerciante:', error);
-        res.status(500).json({ error: 'Error interno al crear el comercio y comerciante' });
+        console.log('Error interno al crear el comercio y comerciante')
+        handleError(res, 'Error interno al crear el comercio y comerciante', 500);
     }
 };
 

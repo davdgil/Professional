@@ -19,7 +19,7 @@ const login = async (userEmail, userPass, router) => {
     });
 
     const data = await response.json();
-
+    console.log(data.token)
     if (!response.ok) {
       toast.error(data.message || "Error al iniciar sesión");
       return;
@@ -71,7 +71,6 @@ function Login() {
     const userTemp ={
       userType: 'incognito'
     }
-    Cookies.set('user', JSON.stringify(userTemp), { path: '/' });
     console.error("Error al obtener usuarios:");
     router.push("/user")
   }

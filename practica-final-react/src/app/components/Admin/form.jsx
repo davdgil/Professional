@@ -1,5 +1,4 @@
 "use client";
-import { v4 as uuidv4 } from 'uuid';
 import './form.css'
 
 
@@ -8,6 +7,7 @@ import { toast } from 'react-hot-toast';
 
 async function onSubmit(commerce, reset) {
     console.log(commerce);
+    const token = localStorage.getItem('token');
 
     const newCommerce = {
         ...commerce,  // Removido id para no enviarlo
@@ -19,6 +19,7 @@ async function onSubmit(commerce, reset) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(newCommerce),
         });
