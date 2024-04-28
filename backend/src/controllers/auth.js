@@ -4,30 +4,27 @@ const bcrypt = require('bcrypt');
 const { handleSuccess, handleError } = require('../utils/handleResponses');
 
 const createNewUser = async (req, res) => {
+    const data = matchedData(req); 
+    console.log(data)
     // en caso de ser un comerciante
     if (req.user) {
         try {
-            const updateData = { ...req.body };
-
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            req.user.password = hashedPassword;
-            updateData.password = hashedPassword;
-            
-            req.user.isActive = true; 
+            const hashedPassword = await bcrypt.hash(data.password, 10);
+            data.password = hashedPassword;
+            req.user.isActive = true;
             const updatedUser = await usersModel.findOneAndUpdate(
-                {email: req.user.email },
-                updateData,
+                { email: req.user.email },
+                data,
                 { new: true, runValidators: true }
             );
             handleSuccess(res, "Usuario comerciante actualizado con éxito", updatedUser);
         } catch (error) {
             handleError(res, "Error al actualizar usuario comerciante", 400);
         }
-
     } else {
         try {
             // Crea un nuevo usuario con la contraseña ya encriptada
-            const newUser = new usersModel(req.body);
+            const newUser = new usersModel(data);
             newUser.password = await bcrypt.hash(newUser.password, 10);  // Encriptar la contraseña
             await newUser.save();
             handleSuccess(res, "Nuevo usuario creado exitosamente", newUser, 201);
@@ -58,22 +55,6 @@ const createMerchantCONTROLLER = async (email) => {
 
 }
 
-const createMerchant = async (req, res) => {
-    console.log(req)
-    const { email } = req.body
-    const newMerchant = new usersModel({
-        email: email,    // Establece el email
-        isActive: false, // Comerciante no activo inicialmente
-        role: "merchant" // Rol específico como comerciante
-    });
-    try {
-        await newMerchant.save();
-        handleSuccess(res, "Nuevo usuario comerciante creado exitosamente", newMerchant, 201);
-    } catch (err) {
-        handleError(res, 'Error al crear el comerciante', 500);
-    }
-
-}
 
 const existingUserGET = async (req, res) => {
     try {
@@ -100,4 +81,4 @@ const existingUserGET = async (req, res) => {
 
 
 
-module.exports = { createNewUser, existingUserGET, createMerchant, createMerchantCONTROLLER };
+module.exports = { createNewUser, existingUserGET, createMerchantCONTROLLER };

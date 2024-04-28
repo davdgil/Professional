@@ -10,12 +10,12 @@ async function onSubmit(commerce, reset) {
     const token = localStorage.getItem('token');
 
     const newCommerce = {
-        ...commerce,  // Removido id para no enviarlo
+        ...commerce, 
     }
 
     console.log("Datos del comercio ", newCommerce);
     try {
-        const response = await fetch('http://localhost:9000/api/commerce/createCommerce', {  // Asegúrate de que la URL es correcta
+        const response = await fetch('http://localhost:9000/api/commerce/createCommerce', {  
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

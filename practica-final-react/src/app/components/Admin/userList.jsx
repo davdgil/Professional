@@ -4,47 +4,32 @@ import toast from "react-hot-toast";
 
 const deleteUser = async (userID) => {
     const confirmDelete = window.confirm("¿Estás seguro de querer eliminar este usuario?");
-    console.log("Borrar:", userID)
     if (!confirmDelete) {
-        toast("Operacion cancelada")
+        toast("Operación cancelada", { icon: 'info' });
         return;
-    } else {
-        try {
-            const response = await fetch('/api/users', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(userID),
-            });
+    }
 
-            if (!response.ok) {
-                toast.error("Error al eliminar el usuario")
-                console.error('Error al eliminar el comercio. Código de estado:', response.status);
-                return;// Puedes manejar el error de alguna manera, mostrar un mensaje, etc.
-            } else {
+    try {
+        const response = await fetch(`http://localhost:9000/api/user/deleteUserById/${userID}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}` // Asegúrate de estar enviando el token
+            },
+        });
 
-                toast.loading("Eliminando...", { duration: 2000 })
-
-                setTimeout(() => {
-
-                    toast.success("Usuario eliminado")
-                }, 2000)
-
-
-                const result = await response.json();
-                console.log(result.message);
-                // Puedes mostrar un mensaje de éxito o realizar alguna acción adicional.
-            }
-        } catch (error) {
-            toast.error("Ha ocurrido un error inesperado")
-            console.error('Error en la función DELETE:', error);
-
-        } finally {
-            setTimeout(() => {
-                window.location.reload();
-            }, 3000)
+        if (!response.ok) {
+            throw new Error('No se pudo eliminar el usuario. Código de estado: ' + response.status);
         }
+
+        const result = await response.json();
+        toast.success("Usuario eliminado correctamente");
+    } catch (error) {
+        toast.error("Error al eliminar el usuario: " + error.message);
+    } finally {
+        setTimeout(() => {
+            window.location.reload(); 
+        }, 2000);
     }
 }
 
@@ -59,7 +44,7 @@ export default function UserList({ userFilter }) {
                     {userFilter.map((user, index) => (
                         <li key={index} className="bg-white rounded-md overflow-hidden shadow-md">
                             <img
-                                src={`https://picsum.photos/300/200?unique=${user.id}`}
+                                src={`https://picsum.photos/300/200?unique=${user._id}`}
                                 className="w-full h-40 object-cover object-center"
                             />
                             <div className="p-4  h-full ">
@@ -72,7 +57,7 @@ export default function UserList({ userFilter }) {
                                 <div className="mt-4 flex justify-end ">
                                     <button
                                         className="text-blue-500 hover:text-blue-700 font-medium focus:outline-none relative"
-                                        onClick={() => deleteUser(user.id)}
+                                        onClick={() => deleteUser(user._id)}
                                     >
                                         Eliminar usuario
                                     </button>

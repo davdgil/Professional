@@ -30,6 +30,11 @@ const validatorRegister = [
         .optional()
         .isBoolean()
         .withMessage('El campo offers debe ser booleano'),
+    check('role')
+        .optional()
+        .isIn(['admin', 'merchant', 'usuario', 'anonimo'])
+        .withMessage('El rol no es válido'),
+
 
     (req, res, next) => {
         validateResults(req, res, next);

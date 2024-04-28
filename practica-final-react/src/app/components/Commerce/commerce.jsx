@@ -1,43 +1,36 @@
 "use client";
 import toast from 'react-hot-toast';
-const deleteComerces = async (commerceID) => {
+
+const deleteCommerce = async (commerceId) => {
     const confirmDelete = window.confirm("¿Estás seguro de querer eliminar este comercio?");
-    console.log("Borrar:", commerceID)
+    console.log("Borrar:", commerceId)
     if (!confirmDelete) {
-        toast("Operacion cancelada")
+        toast("Operación cancelada");
         return;
     } else {
         try {
-            const response = await fetch('/api/commerce', {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:9000/api/commerce/commerceByID/${commerceId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(commerceID),
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (!response.ok) {
-                toast.error("Error al eliminar el usuario")
+                const errorData = await response.json();
+                toast.error("Error al eliminar el comercio: " + errorData.message);
                 console.error('Error al eliminar el comercio. Código de estado:', response.status);
-                return;// Puedes manejar el error de alguna manera, mostrar un mensaje, etc.
+                return;
             } else {
-
-                toast.loading("Eliminando...", { duration: 2000 })
-
-                setTimeout(() => {
-
-                    toast.success("comercio eliminado")
-                }, 2000)
-
-
-                const result = await response.json();
-                console.log(result.message);
-                // Puedes mostrar un mensaje de éxito o realizar alguna acción adicional.
+                toast.success("Comercio eliminado exitosamente");
+                console.log('Comercio eliminado exitosamente');
+                // Realizar acciones adicionales si es necesario
             }
         } catch (error) {
-            toast.error("Ha ocurrido un error inesperado")
+            toast.error("Ha ocurrido un error inesperado");
             console.error('Error en la función DELETE:', error);
-
         } finally {
             setTimeout(() => {
                 window.location.reload();
@@ -57,7 +50,7 @@ export default function Commerces({ commerces }) {
                     {commerces.map((commerce, index) => (
                         <li key={index} className="bg-white rounded-md overflow-hidden shadow-md">
                             <img
-                                src={`https://picsum.photos/300/200?unique=${commerce.id}`}
+                                src={`https://picsum.photos/300/200?unique=${commerce._id}`}
                                 alt={commerce.commerceName}
                                 className="w-full h-40 object-cover object-center"
                             />
@@ -71,7 +64,7 @@ export default function Commerces({ commerces }) {
                                 <div className="mt-4 flex justify-end ">
                                     <button
                                         className="text-blue-500 hover:text-blue-700 font-medium focus:outline-none relative"
-                                        onClick={() => deleteComerces(commerce.id)}
+                                        onClick={() => deleteCommerce(commerce._id)}
                                     >
                                         Eliminar comercio
                                     </button>

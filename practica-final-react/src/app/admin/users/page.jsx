@@ -1,13 +1,26 @@
 "use client"
 import UserList from "@/app/components/Admin/userList";
-import SearchBar from "@/app/components/searchBar";
+import SearchBar from "@/app/components/SearchBar";
+import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 
 const getUsers = async () => {
-    const res = await fetch("http://localhost:3000/api/users");
-    const data = await res.json();
-    console.log(data.users);
-    return data.users;
+    try {
+        const response = await fetch("http://localhost:9000/api/user/getAllUsers", {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Error del servidor');
+        }
+        const data = await response.json();
+        return data; 
+    } catch (error) {
+        toast.error("Error en el fetch " + error.message);
+        return []; 
+    }
 };
 
 

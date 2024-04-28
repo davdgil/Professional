@@ -43,8 +43,9 @@ function SignUp() {
     const { adminMode, ...userData } = data;
 
     const newUser = {
-      ...userData,
-      role: data.adminMode ? 'admin' : 'usuario'
+      role: adminMode ? 'admin' : 'usuario',
+      ...userData
+      
     }
     console.log(newUser)
     saveUser(newUser)

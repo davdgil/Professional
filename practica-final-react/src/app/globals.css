@@ -14,8 +14,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  /* Cambia el fondo a gris oscuro */
-  background: #1a202c; /* También puedes utilizar directamente el valor hexadecimal para bg-gray-900 */
+  background: #1a202c; 
   
   
 }

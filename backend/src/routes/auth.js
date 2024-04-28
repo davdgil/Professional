@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createNewUser, existingUserGET, createMerchant } = require('../controllers/auth');
+const { createNewUser, existingUserGET} = require('../controllers/auth');
 const { userVerification,} = require('../middleware/userVerification')
 const { existingUserPOST, verifyPassword, generateToken } = require('../middleware/login')
 const { validatorRegister } = require('../validators/auth')
@@ -54,39 +54,6 @@ router.post("/register", validatorRegister, userVerification, createNewUser);
  */
 router.get("/existingUser", existingUserGET);
 
-/**
- * @swagger
- * /auth/createMerchant:
- *   post:
- *     summary: Crea un nuevo comerciante
- *     tags: [Merchants]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *             properties:
- *               email:
- *                 type: string
- *                 format: email
- *                 description: Email del comerciante
- *             example:
- *               email: merchant@example.com
- *     responses:
- *       201:
- *         description: Comerciante creado exitosamente
- *       400:
- *         description: Error en la solicitud
- *       409:
- *         description: Ya existe un usuario con ese email
- *       500:
- *         description: Error del servidor
- */
-
-router.post('/createMerchant', createMerchant);
 
 /**
  * @swagger

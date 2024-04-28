@@ -112,6 +112,14 @@ const options = {
                 type: "string",
                 description: "Identificador único del comerciante asociado a este comercio."
               }
+            },
+            required: ["commerceName", "email", "phone", "cif", "address"],
+            example: {
+              commerceName: "comercioDePrueba@gmail.com",
+              email: "comercioDePrueba@example.com",
+              phone: "654324123",
+              cif: "0278987Z",
+              address: "C/mirador de montepinar"
             }
           }
           
