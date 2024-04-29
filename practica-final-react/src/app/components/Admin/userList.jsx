@@ -49,10 +49,10 @@ export default function UserList({ userFilter }) {
                             />
                             <div className="p-4  h-full ">
                                 <h4 className="text-sky-950 text-lg font-bold mb-2">{user.email}</h4>
-                                <p className="text-gray-900 font-bold">ID: <span className=" text-gray-500  ">{user.id}</span></p>
+                                <p className="text-gray-900 font-bold">ID: <span className=" text-gray-500  ">{user._id}</span></p>
                                 <p className="text-gray-900 font-bold">Email: <span className=" text-gray-500  ">{user.email || 'No disponible'}</span></p>
                                 <p className="text-gray-900 font-bold">Fecha:<span className=" text-gray-500  "> {user.date || 'No disponible'}</span></p>
-                                <p className="text-gray-900 font-bold">Usuario: <span className=" text-gray-500  ">{user.userType || 'No disponible'}</span></p>
+                                <p className="text-gray-900 font-bold">Usuario: <span className=" text-gray-500  ">{user.role || 'No disponible'}</span></p>
                                 <p className="text-gray-900 font-bold">Ciudad: <span className=" text-gray-500  ">{user.city || 'No disponible'}</span></p>
                                 <div className="mt-4 flex justify-end ">
                                     <button

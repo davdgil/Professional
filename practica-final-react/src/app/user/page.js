@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import UserPage from "../components/User/userPage";
 import SearchBar from "../components/SearchBar";
+import toast from "react-hot-toast";
 
 
 
@@ -17,12 +18,26 @@ export default function UserPages() {
     useEffect(() => {
         const fetchCommerces = async () => {
             try {
-                const res = await fetch("http://localhost:3000/api/commerce");
-                const data = await res.json();
-                setCommerces(data.commerce);
-                setFilteredCommerces(data.commerce);
+                const response = await fetch("http://localhost:9000/api/commerce/getCommerces", {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure you are passing the token
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Error en al buscar comercios');
+                }
+                const data = await response.json();
+                console.log(data)
+                if (data.length === 0) {
+                    toast.error('Comercios no encontrados');
+                } else {
+                    setCommerces(data);
+                    setFilteredCommerces(data);
+                }
             } catch (error) {
-                console.error("Error al obtener información del comercio:", error);
+                toast.error("Error fetching commerces: " + error.message);
             }
         };
 
@@ -37,7 +52,7 @@ export default function UserPages() {
     const filtrada = commerces.filter((filtered) =>
         filtered.commerceName.toLowerCase().startsWith(searchText.toLowerCase()) ||
         filtered.phone.toLowerCase().startsWith(searchText.toLowerCase()) ||
-        filtered.addres.toLowerCase().startsWith(searchText.toLowerCase())
+        filtered.address.toLowerCase().startsWith(searchText.toLowerCase())
 
     );
 

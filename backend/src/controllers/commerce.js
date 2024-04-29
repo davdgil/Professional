@@ -2,30 +2,42 @@ const { commercesModel, usersModel } = require('../models');
 const { createMerchantCONTROLLER } = require('./auth');
 const { matchedData } = require('express-validator');
 const { handleError } = require('../utils/handleResponses');
-
 const createCommerce = async (req, res) => {
     const data = matchedData(req);
     try {
-        const merchant = await createMerchantCONTROLLER(data.email);
+        // Verifica si ya existe un comercio con el mismo CIF
+        const existingCommerce = await commercesModel.findOne({ cif: data.cif });
+        if (existingCommerce) {
+            console.log("El CIF ya está registrado");
+            handleError(res, "El CIF ya está registrado", 400);
+            return;
+        }
 
+        // Crear comerciante si no existe ya
+        const merchant = await createMerchantCONTROLLER(data.email);
         if (!merchant) {
-            console.log("No se pudo crear el comerciante")
+            console.log("No se pudo crear el comerciante");
             handleError(res, "No se pudo crear el comerciante", 400);
             return;
         }
+
+        // Crear comercio
         const newCommerce = new commercesModel({
             ...data,
             merchant: merchant._id
         });
 
         await newCommerce.save();
-        console.log("Comercio creado")
+        console.log("Comercio creado");
         res.status(201).json({ message: 'Comercio y comerciante creados con éxito', commerce: newCommerce });
     } catch (error) {
-        console.log('Error interno al crear el comercio y comerciante')
+        console.error('Error interno al crear el comercio y comerciante:', error);
         handleError(res, 'Error interno al crear el comercio y comerciante', 500);
     }
 };
+
+
+
 
 
 const getAllCommerces = async (req, res) =>{
